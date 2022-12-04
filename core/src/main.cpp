@@ -1,9 +1,7 @@
 #include <iostream>
 
 #include <tbb/parallel_for.h>
-
 #include <glm/common.hpp>
-
 #include <rapidjson/rapidjson.h>
 
 #include <core/test.h>

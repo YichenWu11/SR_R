@@ -16,6 +16,7 @@ find_package(Threads REQUIRED)
 find_package(TBB CONFIG REQUIRED COMPONENTS tbb)
 find_package(benchmark CONFIG REQUIRED)
 find_package(glm CONFIG REQUIRED)
+find_package(RapidJSON CONFIG REQUIRED)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads)
 target_link_libraries(${PROJECT_NAME} PUBLIC benchmark::benchmark benchmark::benchmark_main)

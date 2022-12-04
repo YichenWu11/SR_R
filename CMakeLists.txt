@@ -25,4 +25,3 @@ if(WIN32)
 endif()
 
 add_subdirectory(core)
-add_subdirectory(3rdparty/rapidjson)
