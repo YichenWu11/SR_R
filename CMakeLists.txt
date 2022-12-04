@@ -21,7 +21,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/bin)
 project(SR_R)
 
 if(WIN32)
-    add_definitions(-DNOMINMAX -D_USE_MATH_DEFINES)
+    add_definitions(-DNOMINMAX -D_USE_MATH_DEFINES -DUNICODE)
 endif()
 
 add_subdirectory(core)

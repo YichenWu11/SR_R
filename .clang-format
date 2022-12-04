@@ -70,7 +70,7 @@ ColumnLimit: 0
 
 CompactNamespaces: true
 
-ConstructorInitializerAllOnOneLineOrOnePerLine: false
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
 
 ConstructorInitializerIndentWidth: 4
 

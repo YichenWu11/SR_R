@@ -1,17 +1,11 @@
 #include <iostream>
 
-#include <tbb/parallel_for.h>
-#include <glm/common.hpp>
-#include <rapidjson/rapidjson.h>
-
-#include <core/test.h>
+#include <ui/window.h>
 
 int main() {
-    tbb::parallel_for(size_t(0), size_t(5), [&](size_t n) {
-        printf("%zu\n", n);
-    });
+    SRR::Window window(640, 480, "Hello_World");
 
-    std::cout << "Hello SR_R" << std::endl;
+    window.run();
 
     return 0;
 }
