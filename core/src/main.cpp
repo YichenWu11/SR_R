@@ -1,11 +1,16 @@
-#include <iostream>
+#include <engine/engine.h>
 
-#include <ui/window.h>
+// https://gcc.gnu.org/onlinedocs/cpp/Stringizing.html
+#define SRR_XSTR(s) SRR_STR(s)
+#define SRR_STR(s) #s
 
 int main() {
-    SRR::Window window(640, 480, "Hello_World");
+    SRR::Engine srr_engine;
+    srr_engine.startEngine(SRR_XSTR(ROOT_DIR));
 
-    window.run();
+    srr_engine.run();
+
+    srr_engine.shutdownEngine();
 
     return 0;
 }
