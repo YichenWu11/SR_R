@@ -39,21 +39,29 @@ namespace SRR {
 
     void RenderSystem::render(Util::TGAImage* target) {
         // TODO: Do Render Part Here
-
         static float cnt = 0.0f;
 
-        tbb::parallel_for(tbb::blocked_range2d<size_t>(0, target->get_width(), 0, target->get_height()),
-                          [&](tbb::blocked_range2d<size_t> r) {
-            for (size_t i = r.rows().begin(); i < r.rows().end(); ++i) {
-                for (size_t j = r.cols().begin(); j < r.cols().end(); ++j) {
-                    target->set(i, j,
-                                Util::TGAColor(
-                                    std::sin(i + cnt) * 255,
-                                    std::cos(j + cnt) * 255,
-                                    std::sin(j + cnt) * 255));
-                }
-            }
-        });
+        switch (m_pipeline) {
+            case RENDER_PIPELINE::FORWARD_PIPELINE:
+                tbb::parallel_for(tbb::blocked_range2d<size_t>(0, target->get_width(), 0, target->get_height()),
+                                  [&](tbb::blocked_range2d<size_t> r) {
+                    for (size_t i = r.rows().begin(); i < r.rows().end(); ++i) {
+                        for (size_t j = r.cols().begin(); j < r.cols().end(); ++j) {
+                            target->set(i, j,
+                                        Util::TGAColor(
+                                            std::sin(i + cnt) * 255,
+                                            std::cos(j + cnt) * 255,
+                                            std::sin(j + cnt) * 255));
+                        }
+                    }
+                });
+                break;
+            case RENDER_PIPELINE::DEFERRED_PIPELINE:
+                // TODO: Impl deferred rendering
+                break;
+            default:
+                break;
+        }
 
         cnt += 0.5f;
     }

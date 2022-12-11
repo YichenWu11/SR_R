@@ -13,6 +13,9 @@ namespace SRR {
     }
 
     void Engine::shutdownEngine() {
+        g_runtime_global_context.m_window_system->outputRes(
+            g_runtime_global_context.m_render_system->getRes("main").value());
+
         LOG_INFO("srr shutdown");
 
         g_runtime_global_context.shutdownSystems();
@@ -49,11 +52,14 @@ namespace SRR {
     }
 
     void Engine::renderTick(float delta_time) {
-        g_runtime_global_context.m_render_system->render(
-            g_runtime_global_context.m_render_system->getRes("main").value());
+        auto&& render_target = g_runtime_global_context.m_render_system->getRes("main");
 
-        g_runtime_global_context.m_window_system->render(
-            g_runtime_global_context.m_render_system->getRes("main").value());
+        if (!render_target.has_value())
+            LOG_FATAL("Forget to register `main` for m_render_system!!!");
+
+        g_runtime_global_context.m_render_system->render(render_target.value());
+
+        g_runtime_global_context.m_window_system->render(render_target.value());
     }
 
     void Engine::calculateFPS(float delta_time) {

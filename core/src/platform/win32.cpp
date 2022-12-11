@@ -2,8 +2,8 @@
 #include <cstdio>
 // #include <string>
 
-#include <platform/win32.h>
 #include <core/base/tgaimage.h>
+#include <platform/win32.h>
 
 window_t* window = NULL;
 
@@ -22,13 +22,13 @@ window_t* window = NULL;
 */
 static void init_bm_header(BITMAPINFOHEADER& bi, int width, int height) {
     memset(&bi, 0, sizeof(BITMAPINFOHEADER));
-    bi.biSize = sizeof(BITMAPINFOHEADER);
-    bi.biWidth = width;
-    bi.biHeight = -height; //从上到下
-    bi.biPlanes = 1;
-    bi.biBitCount = 32;
+    bi.biSize        = sizeof(BITMAPINFOHEADER);
+    bi.biWidth       = width;
+    bi.biHeight      = -height; //从上到下
+    bi.biPlanes      = 1;
+    bi.biBitCount    = 32;
     bi.biCompression = BI_RGB;
-    bi.biSizeImage = width * height * 4;
+    bi.biSizeImage   = width * height * 4;
 }
 
 int window_init(int width, int height, const char* title, WNDPROC func) {
@@ -36,25 +36,25 @@ int window_init(int width, int height, const char* title, WNDPROC func) {
     memset(window, 0, sizeof(window_t));
     window->is_close = 0;
 
-    RECT rect = {0, 0, width, height}; //一个矩形范围 左上右下
-    int wx, wy, sx, sy;
-    LPVOID ptr; //就是void *
-    HDC hDC;    //设备环境，h代表句柄，handle
+    RECT             rect = {0, 0, width, height}; //一个矩形范围 左上右下
+    int              wx, wy, sx, sy;
+    LPVOID           ptr; //就是void *
+    HDC              hDC; //设备环境，h代表句柄，handle
     BITMAPINFOHEADER bi;
 
     //注册窗口类
     ATOM atom;
     //初始化结构体
     WNDCLASS wc;
-    wc.style = CS_BYTEALIGNCLIENT;                          //窗口风格
-    wc.lpfnWndProc = func;                                  //回调函数
-    wc.cbClsExtra = 0;                                      //紧跟在窗口类尾部的一块额外空间，不用则设为0
-    wc.cbWndExtra = 0;                                      //紧跟在窗口实例尾部的一块额外空间，不用则设为0
-    wc.hInstance = GetModuleHandle(NULL);                   //当前实例句柄
-    wc.hIcon = LoadIcon(NULL, IDI_APPLICATION);             //任务栏图标
-    wc.hCursor = LoadCursor(NULL, IDC_ARROW);               //光标样式
+    wc.style         = CS_BYTEALIGNCLIENT;                  //窗口风格
+    wc.lpfnWndProc   = func;                                //回调函数
+    wc.cbClsExtra    = 0;                                   //紧跟在窗口类尾部的一块额外空间，不用则设为0
+    wc.cbWndExtra    = 0;                                   //紧跟在窗口实例尾部的一块额外空间，不用则设为0
+    wc.hInstance     = GetModuleHandle(NULL);               //当前实例句柄
+    wc.hIcon         = LoadIcon(NULL, IDI_APPLICATION);     //任务栏图标
+    wc.hCursor       = LoadCursor(NULL, IDC_ARROW);         //光标样式
     wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH); //背景样式
-    wc.lpszMenuName = NULL;                                 //菜单
+    wc.lpszMenuName  = NULL;                                //菜单
     wc.lpszClassName = L"SRR";                              //该窗口类的名字
 
     atom = RegisterClass(&wc); //注册窗口类
@@ -70,7 +70,7 @@ int window_init(int width, int height, const char* title, WNDPROC func) {
     init_bm_header(bi, width, height);
 
     //获得兼容性DC
-    hDC = GetDC(window->h_window);
+    hDC            = GetDC(window->h_window);
     window->mem_dc = CreateCompatibleDC(hDC);
     ReleaseDC(window->h_window, hDC);
 
@@ -78,10 +78,10 @@ int window_init(int width, int height, const char* title, WNDPROC func) {
     window->bm_dib = CreateDIBSection(window->mem_dc, (BITMAPINFO*)&bi, DIB_RGB_COLORS, &ptr, 0, 0); //创建设备无关句柄
     assert(window->bm_dib != NULL);
 
-    window->bm_old = (HBITMAP)SelectObject(window->mem_dc, window->bm_dib); //把新创建的位图句柄写入mem_dc
+    window->bm_old    = (HBITMAP)SelectObject(window->mem_dc, window->bm_dib); //把新创建的位图句柄写入mem_dc
     window->window_fb = (unsigned char*)ptr;
 
-    window->width = width;
+    window->width  = width;
     window->height = height;
 
     AdjustWindowRect(&rect, GetWindowLong(window->h_window, GWL_STYLE), 0); //调整窗口大小
@@ -142,16 +142,14 @@ static void window_display() {
     LOGFONT logfont; //改变输出字体
     ZeroMemory(&logfont, sizeof(LOGFONT));
     logfont.lfCharSet = ANSI_CHARSET;
-    logfont.lfHeight = 20; //设置字体的大小
-    HFONT hFont = CreateFontIndirect(&logfont);
+    logfont.lfHeight  = 20; //设置字体的大小
+    HFONT hFont       = CreateFontIndirect(&logfont);
 
     HDC hDC = GetDC(window->h_window);
     //目标举行的左上角(x,y), 宽度，高度，上下文指针
     SelectObject(window->mem_dc, hFont);
     SetTextColor(window->mem_dc, RGB(190, 190, 190));
     SetBkColor(window->mem_dc, RGB(80, 80, 80));
-    // TextOut(window->mem_dc, 300, 50, "Project Name:SRender", strlen("Project Name:SRender"));
-    // TextOut(window->mem_dc, 300, 80, "Author:Lei", strlen("Author:Lei Sun"));
     TextOut(window->mem_dc, 20, 20,
             L"This is a test demo.",
             strlen("This is a test demo."));
@@ -165,9 +163,9 @@ void window_draw(SRR::Util::TGAImage* framebuffer) {
     int i, j;
     for (int i = 0; i < window->height; i++) {
         for (int j = 0; j < window->width; j++) {
-            int index = (i * window->width + j) * 4;
-            SRR::Util::TGAColor c = framebuffer->get(j, i);
-            window->window_fb[index] = c[0];
+            int                 index    = (i * window->width + j) * 4;
+            SRR::Util::TGAColor c        = framebuffer->get(j, i);
+            window->window_fb[index]     = c[0];
             window->window_fb[index + 1] = c[1];
             window->window_fb[index + 2] = c[2];
         }

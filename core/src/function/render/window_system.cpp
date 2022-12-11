@@ -1,10 +1,6 @@
 #include <cassert>
 #include <chrono>
 
-#include <glm/gtc/random.hpp>
-#include <tbb/blocked_range2d.h>
-#include <tbb/parallel_for.h>
-
 #include <core/base/macro.h>
 #include <core/base/tgaimage.h>
 #include <function/global/global_context.h>
